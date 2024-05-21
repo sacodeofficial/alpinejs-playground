@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" />
+    <script src="//unpkg.com/alpinejs" defer></script>
+
+
+</head>
+<body class="container mx-auto p-5 bg-gray-100">
+    <div class="p-5">
+
+        <div
+       x-data="{
+           posts: [],
+           currentPage: 1,
+           perPage: 3,
+           totalPages: 0,
+           fetchPosts() {
+               fetch(`https://sagufoundation.org/wp-json/wp/v2/posts?_embed&per_page=${this.perPage}&page=${this.currentPage}`)
+               .then(response => response.json())
+               .then(data => {
+                       this.posts = data;
+                       this.totalPages = parseInt(response.headers.get('X-WP-TotalPages'));
+                   })
+               .catch(error => console.error('Error:', error));
+           },
+           changePage(page) {
+               this.currentPage = page;
+               this.fetchPosts();
+           }
+       }"
+       x-init="fetchPosts()"
+       class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+    >
+        <template x-for="(post, index) in posts" :key="index">
+            <div class="bg-white rounded-lg shadow-lg">
+                <img class="w-full h-64 object-cover object-center" :src="post._embedded && post._embedded['wp:featuredmedia'] && post._embedded['wp:featuredmedia'][0].source_url" alt="Card image cap">
+                <div class="p-4">
+                    <h5 class="text-lg font-bold" x-text="post.title && post.title.rendered"></h5>
+                    <!-- <p class="card-text" x-html="post.content && post.content.rendered"></p> -->
+                </div>
+            </div>
+        </template>
+
+        <nav aria-label="Page navigation example">
+            <ul class="flex justify-center items-center space-x-4">
+                <li class="page-item"><a class="page-link" @click.prevent="changePage(currentPage - 1)" href="#">Previous</a></li>
+                <li class="page-item" :class="{ active: currentPage === 1 }"><a class="page-link" @click.prevent="changePage(1)" href="#">1</a></li>
+                <li class="page-item" :class="{ active: currentPage === 2 }"><a class="page-link" @click.prevent="changePage(2)" href="#">2</a></li>
+                <li class="page-item" :class="{ active: currentPage === 3 }"><a class="page-link" @click.prevent="changePage(3)" href="#">3</a></li>
+                <li class="page-item"><a class="page-link" @click.prevent="changePage(currentPage + 1)" href="#">Next</a></li>
+            </ul>
+        </nav>
+
+    </div>
+
+    </div>
+  </body>
+</html>
