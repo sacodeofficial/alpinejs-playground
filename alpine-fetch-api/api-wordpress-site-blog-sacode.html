@@ -37,10 +37,12 @@
         >
             <template x-for="(post, index) in posts" :key="index">
                 <div class="bg-white rounded-lg shadow-lg">
-                    <img class="w-full h-64 object-cover object-center" :src="post.featured_image" alt="Card image cap">
+                    <img class="w-full h-100 object-cover object-center" :src="post.featured_image" alt="Card image cap">
                     <div class="p-4">
-                        <h5 class="text-lg font-bold" x-text="post.title"></h5>
-                        <p class="card-text" x-html="post.content"></p>
+                        <a href="#" class="hover:text-blue-600 transition duration-200">
+                            <h5 class="text-4xl pb-6 font-bold" x-text="post.title"></h5>
+                        </a>
+                        <!-- <p class="card-text" x-html="post.content"></p> -->
                     </div>
                 </div>
             </template>
