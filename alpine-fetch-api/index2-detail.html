@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" />
+    <script src="//unpkg.com/alpinejs" defer></script>
+</head>
+<body class="container mx-auto p-5 bg-gray-100">
+    <div x-data="{
+        post: {},
+        slug: new URL(location.href).searchParams.get('slug'),
+        fetchPost() {
+            fetch(`https://public-api.wordpress.com/rest/v1.1/sites/blogsacode.wordpress.com/posts/slug:${this.slug}`)
+            .then(response => response.json())
+            .then(data => {
+                this.post = data;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    }"
+    x-init="fetchPost()"
+    >
+        <div class="bg-white rounded-lg shadow-lg">
+            <img class="w-full h-100 object-cover object-center" :src="post.featured_image" alt="Card image cap">
+            <div class="p-4">
+                <h5 class="text-4xl pb-6 font-bold" x-text="post.title"></h5>
+                <p class="card-text" x-html="post.content"></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
