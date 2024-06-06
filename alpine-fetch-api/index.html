@@ -24,18 +24,6 @@
             })
             .catch(error => console.error('Error:', error));
         },
-        changePage(page) {
-            this.currentPage = page;
-            this.fetchPosts();
-            this.postId = null;
-        },
-        showPost(postId) {
-            this.postId = postId;
-            this.postContent = this.posts.find(post => post.ID === postId).content;
-        },
-        togglePost(postId) {
-            this.postId = this.postId === postId ? null : postId;
-        }
     }"
     x-init="fetchPosts()"
     class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
@@ -49,10 +37,6 @@
                         slug: <span x-text="post.slug"></span>
                     </a>
                     <p class="card-text" x-html="post.content.substring(0, post.content.indexOf('.') + 1)"></p>
-                    <template x-if="postId === post.ID">
-                        <p x-html="postContent"></p>
-                        <button @click.prevent="togglePost(post.ID)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Hide</button>
-                    </template>
             </div>
         </template>
 
